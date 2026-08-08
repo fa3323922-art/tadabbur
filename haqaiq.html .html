@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F7F3EC">
+<title>تدبر · دفتر الاستهداء بآيات اكتشاف الحقائق</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EC;
+    --paper-deep:#EFE4D5;
+    --ink:#4A3826;
+    --ink-soft:#7A6752;
+    --brown:#8B5E34;
+    --brown-soft:#D9C3A6;
+    --sage:#8B6F4E;
+    --line: rgba(74,56,38,0.14);
+    --shadow: 0 1px 2px rgba(74,56,38,0.06), 0 8px 24px rgba(74,56,38,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{color-scheme: light only; background:#F7F3EC !important;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(139,94,52,0.08), transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(122,103,82,0.09), transparent 45%),
+      var(--paper) !important;
+    color:var(--ink);
+    font-family:'Tajawal', sans-serif;
+    min-height:100vh;
+    padding:28px 16px 60px;
+  }
+  @media (prefers-color-scheme: dark){
+    html, body{ background:#F7F3EC !important; }
+    body{ color:var(--ink) !important; }
+    .card, .entry{ background:var(--paper-deep) !important; }
+    input, textarea{ background:var(--paper) !important; color:var(--ink) !important; }
+  }
+  .wrap{max-width:640px; margin:0 auto;}
+
+  /* ---- Header ---- */
+  header{
+    text-align:center;
+    margin-bottom:30px;
+    position:relative;
+  }
+  .verse{
+    font-family:'Amiri', serif;
+    font-size:1.05rem;
+    color:var(--brown);
+    margin:0 0 12px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    line-height:1.9;
+    max-width:480px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  h1{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:2rem;
+    margin:0 0 6px;
+    color:var(--ink);
+    letter-spacing:0.5px;
+  }
+  .subtitle{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    font-weight:400;
+    max-width:420px;
+    margin:0 auto;
+    line-height:1.7;
+  }
+  .rule{
+    width:120px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--brown-soft), transparent);
+    margin:18px auto 0;
+  }
+
+  /* ---- Stats strip ---- */
+  .stats{
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    margin:22px 0 30px;
+    font-family:'Amiri', serif;
+  }
+  .stat{text-align:center;}
+  .stat .num{font-size:1.6rem; color:var(--brown); font-weight:700; display:block; line-height:1;}
+  .stat .lbl{font-size:0.72rem; color:var(--ink-soft); font-family:'Tajawal'; margin-top:4px; display:block;}
+
+  /* ---- Form card ---- */
+  .card{
+    background:var(--paper-deep);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin-bottom:26px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:12px; right:12px; bottom:12px; left:12px;
+    border:1px solid rgba(139,94,52,0.18);
+    border-radius:9px;
+    pointer-events:none;
+  }
+  .field{margin-bottom:16px;}
+  .field:last-of-type{margin-bottom:0;}
+  label{
+    display:block;
+    font-size:0.82rem;
+    color:var(--brown);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  input[type="text"], input[type="date"], textarea{
+    width:100%;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 13px;
+    font-family:'Tajawal', sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+    resize:vertical;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus, textarea:focus{
+    outline:none;
+    border-color:var(--brown);
+    box-shadow:0 0 0 3px rgba(139,94,52,0.12);
+  }
+  textarea{min-height:70px; line-height:1.6;}
+  .row2{display:flex; gap:12px;}
+  .row2 > .field{flex:1;}
+
+  button.save{
+    width:100%;
+    margin-top:18px;
+    background:var(--brown);
+    color:#F5FAFC;
+    border:none;
+    border-radius:8px;
+    padding:13px;
+    font-family:'Tajawal';
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  button.save:hover{background:#6E4A28;}
+  button.save:active{transform:scale(0.99);}
+  button.save:disabled{opacity:0.5; cursor:default;}
+
+  .status{
+    text-align:center;
+    font-size:0.82rem;
+    color:#8B6F4E;
+    height:18px;
+    margin-top:8px;
+  }
+
+  /* ---- Entries ---- */
+  .entries-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:8px 0 16px;
+  }
+  .entries-head span{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:1.15rem;
+  }
+  .entries-head .line{flex:1; height:1px; background:var(--line);}
+
+  .entry{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:14px;
+    position:relative;
+    border-right:3px solid var(--brown-soft);
+    box-shadow:var(--shadow);
+  }
+  .entry-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .entry-juz{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    color:var(--ink);
+    font-size:1.05rem;
+  }
+  .entry-date{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+  .entry-block{margin-top:10px;}
+  .entry-block .k{
+    font-size:0.74rem;
+    color:var(--brown);
+    font-weight:700;
+    margin-bottom:3px;
+  }
+  .entry-block .v{
+    font-size:0.92rem;
+    line-height:1.85;
+    color:var(--ink);
+    white-space:pre-wrap;
+  }
+  .entry-ayat .v{font-family:'Amiri', serif; font-size:1.05rem;}
+  .del{
+    background:none; border:none; cursor:pointer;
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    padding:2px 4px;
+    opacity:0.55;
+    transition:opacity .15s, color .15s;
+  }
+  .del:hover{opacity:1; color:#a15c4a;}
+
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    padding:30px 10px;
+    line-height:1.9;
+  }
+
+  footer{
+    text-align:center;
+    font-size:0.75rem;
+    color:var(--ink-soft);
+    opacity:0.6;
+    margin-top:36px;
+  }
+
+  @media (max-width:420px){
+    .row2{flex-direction:column; gap:16px;}
+    h1{font-size:1.7rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="verse">﴿ وَقُل رَّبِّ زِدْنِي عِلْمًا ﴾</p>
+    <h1>دفتر الاستهداء بآيات اكتشاف الحقائق</h1>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="num" id="statCount">0</span><span class="lbl">تدوينة</span></div>
+    <div class="stat"><span class="num" id="statStreak">0</span><span class="lbl">أيام متتالية</span></div>
+  </div>
+
+  <div class="card">
+    <div class="field row2">
+      <div class="field">
+        <label for="fJuz">الجزء / السورة</label>
+        <input type="text" id="fJuz" placeholder="مثال: الجزء الثالث">
+      </div>
+      <div class="field">
+        <label for="fDate">التاريخ</label>
+        <input type="date" id="fDate">
+      </div>
+    </div>
+    <div class="field">
+      <label for="fAyat">الآية / الآيات التي تطرقت لاكتشاف الحقائق</label>
+      <textarea id="fAyat" placeholder="اكتب الآية أو رقمها ومكانها..."></textarea>
+    </div>
+    <div class="field">
+      <label for="fFawaid">الاستهداء بآيات اكتشاف الحقائق</label>
+      <textarea id="fFawaid" placeholder="ما الذي تعلمته من هذه الآية عن اكتشاف الحقائق؟"></textarea>
+    </div>
+    <button class="save" id="saveBtn">حفظ التدوينة</button>
+    <div class="status" id="statusMsg"></div>
+  </div>
+
+  <div class="entries-head">
+    <span>تدويناتي</span>
+    <div class="line"></div>
+  </div>
+
+  <div id="entriesList">
+    <div class="loading">جارِ التحميل...</div>
+  </div>
+
+  <footer>دفتر شخصي للاستهداء اليومي</footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'haqaiq_entries';
+let entries = [];
+
+function todayISO(){
+  const d = new Date();
+  return d.toISOString().slice(0,10);
+}
+
+function fmtDate(iso){
+  try{
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' });
+  }catch(e){ return iso; }
+}
+
+async function loadEntries(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    entries = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    entries = [];
+  }
+  render();
+}
+
+async function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function computeStreak(){
+  if(entries.length === 0) return 0;
+  const dates = [...new Set(entries.map(e => e.date))].sort().reverse();
+  let streak = 0;
+  let cursor = new Date();
+  cursor.setHours(0,0,0,0);
+
+  const cursorISO = () => cursor.toISOString().slice(0,10);
+  let idx = 0;
+
+  if(dates[0] !== cursorISO()){
+    cursor.setDate(cursor.getDate() - 1);
+    if(dates[0] !== cursorISO()) return 0;
+  }
+  while(idx < dates.length && dates[idx] === cursorISO()){
+    streak++;
+    idx++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+function render(){
+  document.getElementById('statCount').textContent = entries.length;
+  document.getElementById('statStreak').textContent = computeStreak();
+
+  const listEl = document.getElementById('entriesList');
+  if(entries.length === 0){
+    listEl.innerHTML = `
+      <div class="empty">
+        <div>لم تُدوّن أي استهداء بعد.<br>ابدأ اليوم بأول تدوينة من ورد جزئك.</div>
+      </div>`;
+    return;
+  }
+
+  const sorted = [...entries].sort((a,b) => (b.date+b.createdAt).localeCompare(a.date+a.createdAt));
+  listEl.innerHTML = sorted.map(e => `
+    <div class="entry" data-id="${e.id}">
+      <div class="entry-top">
+        <span class="entry-juz">${escapeHtml(e.juz || 'بدون عنوان')}</span>
+        <span class="entry-date">${fmtDate(e.date)}</span>
+      </div>
+      ${e.ayat ? `
+      <div class="entry-block entry-ayat">
+        <div class="k">الآية</div>
+        <div class="v">${escapeHtml(e.ayat)}</div>
+      </div>` : ''}
+      ${e.fawaid ? `
+      <div class="entry-block">
+        <div class="k">الاستهداء</div>
+        <div class="v">${escapeHtml(e.fawaid)}</div>
+      </div>` : ''}
+      <div style="text-align:left; margin-top:10px;">
+        <button class="del" data-id="${e.id}">حذف</button>
+      </div>
+    </div>
+  `).join('');
+
+  listEl.querySelectorAll('.del').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-id');
+      entries = entries.filter(e => e.id !== id);
+      render();
+      await persist();
+    });
+  });
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function saveEntry(){
+  const juz = document.getElementById('fJuz').value.trim();
+  const date = document.getElementById('fDate').value || todayISO();
+  const ayat = document.getElementById('fAyat').value.trim();
+  const fawaid = document.getElementById('fFawaid').value.trim();
+  const statusEl = document.getElementById('statusMsg');
+  const btn = document.getElementById('saveBtn');
+
+  if(!juz && !ayat && !fawaid){
+    statusEl.textContent = 'اكتب شيئًا أولًا قبل الحفظ';
+    statusEl.style.color = '#a15c4a';
+    return;
+  }
+
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,7),
+    juz, date, ayat, fawaid,
+    createdAt: new Date().toISOString()
+  };
+
+  entries.push(entry);
+  btn.disabled = true;
+  statusEl.style.color = '#8B6F4E';
+  statusEl.textContent = 'جارِ الحفظ...';
+
+  const ok = await persist();
+
+  btn.disabled = false;
+  if(ok){
+    statusEl.textContent = 'تم الحفظ بنجاح ✓';
+    document.getElementById('fJuz').value = '';
+    document.getElementById('fAyat').value = '';
+    document.getElementById('fFawaid').value = '';
+    document.getElementById('fDate').value = todayISO();
+    render();
+  }else{
+    entries.pop();
+    statusEl.textContent = 'حدث خطأ أثناء الحفظ، حاول مجددًا';
+    statusEl.style.color = '#a15c4a';
+  }
+  setTimeout(() => { statusEl.textContent=''; }, 2500);
+}
+
+document.getElementById('fDate').value = todayISO();
+document.getElementById('saveBtn').addEventListener('click', saveEntry);
+loadEntries();
+</script>
+</body>
+</html>
