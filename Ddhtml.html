@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شجرة حفظ كلمات الظاء في القرآن الكريم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f1e4;
+    --paper-deep:#efe6cf;
+    --ink:#1b3a2b;
+    --forest:#1b4332;
+    --forest-2:#2d6a4f;
+    --leaf:#40916c;
+    --leaf-light:#74c69d;
+    --mint:#d8f3dc;
+    --mint-soft:#eef9f0;
+    --gold:#a67c1e;
+    --gold-soft:#f1e2b8;
+    --thorn:#8a4b2e;
+    --thorn-soft:#f4e3d3;
+    --shadow: 0 6px 18px rgba(27,67,50,.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -5%, rgba(64,145,108,.10), transparent 60%),
+      radial-gradient(1000px 500px at 100% 10%, rgba(166,124,30,.08), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.7;
+    padding:0 0 80px;
+  }
+  .quran-font{font-family:'Amiri Quran','Amiri', serif;}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    text-align:center;
+    padding:64px 20px 90px;
+    background:
+      linear-gradient(180deg, rgba(27,67,50,.06), transparent 70%),
+      var(--paper);
+    border-bottom:1px solid rgba(27,67,50,.15);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(115deg, rgba(45,106,79,.05) 0 2px, transparent 2px 34px);
+    pointer-events:none;
+  }
+  .hero .eyebrow{
+    display:inline-block;
+    font-size:13px;
+    letter-spacing:.12em;
+    color:var(--gold);
+    background:var(--gold-soft);
+    border:1px solid rgba(166,124,30,.35);
+    padding:6px 18px;
+    border-radius:999px;
+    margin-bottom:22px;
+    font-weight:700;
+  }
+  .hero h1{
+    font-family:'Amiri Quran','Amiri',serif;
+    font-size:clamp(32px,5vw,54px);
+    color:var(--forest);
+    margin:0 0 14px;
+    font-weight:700;
+  }
+  .hero .ظ-big{
+    font-family:'Amiri Quran',serif;
+    color:var(--leaf);
+    font-size:1.15em;
+  }
+  .hero p.sub{
+    font-size:17px;
+    color:#3f5b4c;
+    max-width:640px;
+    margin:0 auto 26px;
+  }
+  .hero .stats{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .stat-chip{
+    background:#fff;
+    border:1px solid rgba(27,67,50,.15);
+    box-shadow:var(--shadow);
+    border-radius:14px;
+    padding:12px 20px;
+    min-width:120px;
+  }
+  .stat-chip b{
+    display:block;
+    font-family:'Amiri',serif;
+    font-size:24px;
+    color:var(--forest);
+  }
+  .stat-chip span{font-size:12.5px; color:#5a6f63;}
+
+  /* ===== container / vine map ===== */
+  .wrap{max-width:920px; margin:0 auto; padding:50px 22px 0;}
+  .section-title{
+    display:flex; align-items:center; gap:14px;
+    margin:64px 0 26px;
+  }
+  .section-title h2{
+    font-family:'Amiri',serif;
+    font-size:22px;
+    color:var(--forest);
+    margin:0;
+    white-space:nowrap;
+  }
+  .section-title .line{height:1px; flex:1; background:linear-gradient(90deg, rgba(45,106,79,.4), transparent);}
+
+  .map-intro{
+    background:linear-gradient(135deg, var(--mint-soft), #fff);
+    border:1px solid rgba(64,145,108,.25);
+    border-radius:18px;
+    padding:22px 26px;
+    box-shadow:var(--shadow);
+    font-size:15px;
+    color:#33513f;
+  }
+  .map-intro b{color:var(--forest);}
+
+  /* vine trunk */
+  .vine{
+    position:relative;
+    margin-top:20px;
+    padding-inline-end:34px; /* room for trunk on the right (RTL start) */
+  }
+  .vine::before{
+    content:"";
+    position:absolute;
+    top:6px; bottom:6px;
+    right:14px;
+    width:4px;
+    border-radius:4px;
+    background:linear-gradient(180deg, var(--leaf-light), var(--leaf), var(--forest-2), var(--gold));
+    box-shadow:0 0 0 4px rgba(64,145,108,.08);
+  }
+
+  .node{
+    position:relative;
+    margin-bottom:26px;
+    padding-right:52px;
+  }
+  .node::before{ /* leaf node dot */
+    content:"";
+    position:absolute;
+    right:0px;
+    top:22px;
+    width:32px; height:32px;
+    background:var(--pod-color, var(--leaf));
+    border-radius:60% 40% 55% 45% / 55% 45% 55% 45%;
+    border:3px solid var(--paper);
+    box-shadow:0 0 0 2px var(--pod-color, var(--leaf));
+    transform:rotate(-15deg);
+  }
+  .node .count-badge{
+    position:absolute;
+    right:2px; top:29px;
+    width:28px; height:28px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10.5px; font-weight:800; color:#fff;
+    font-family:'Tajawal',sans-serif;
+    pointer-events:none;
+  }
+
+  .card{
+    background:#fff;
+    border:1px solid rgba(27,67,50,.14);
+    border-radius:16px;
+    padding:20px 22px;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .card .tag{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    color:#fff;
+    background:var(--pod-color, var(--leaf));
+    padding:3px 12px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .card h3{
+    margin:0 0 6px;
+    font-family:'Amiri Quran','Amiri',serif;
+    font-size:26px;
+    color:var(--forest);
+  }
+  .card h3 small{
+    font-family:'Tajawal',sans-serif;
+    font-size:13px;
+    color:#6b7d72;
+    font-weight:400;
+    margin-inline-start:8px;
+  }
+  .card .meaning{
+    font-size:14.5px;
+    color:#3d4f43;
+    margin-bottom:12px;
+  }
+  .card .refs{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-bottom:6px;
+  }
+  .ref-pill{
+    font-size:12.5px;
+    background:var(--mint);
+    color:var(--forest);
+    border:1px solid rgba(45,106,79,.25);
+    padding:4px 11px;
+    border-radius:10px;
+    font-weight:600;
+  }
+  .ref-pill.first{
+    background:var(--gold-soft);
+    color:var(--gold);
+    border-color:rgba(166,124,30,.4);
+  }
+  .note{
+    margin-top:12px;
+    font-size:13px;
+    color:#5a6f63;
+    background:var(--mint-soft);
+    border-right:3px solid var(--leaf);
+    padding:8px 12px;
+    border-radius:6px;
+  }
+  .exception{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--thorn);
+    background:var(--thorn-soft);
+    border-right:3px solid var(--thorn);
+    padding:8px 12px;
+    border-radius:6px;
+  }
+  .exception b{display:block; margin-bottom:3px;}
+
+  /* size tiers -> visual "growth" of the vine as counts increase */
+  .tier-1 h3{font-size:20px;}
+  .tier-1 .card{padding:16px 18px;}
+  .tier-2 h3{font-size:23px;}
+  .tier-3 h3{font-size:27px;}
+  .tier-4 h3{font-size:31px;}
+  .tier-5 .card{border-width:2px;}
+  .tier-5 h3{font-size:36px;}
+
+  /* multi-word groups: grid of mini cards inside one node */
+  .cluster{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:14px;
+  }
+  .mini-card{
+    background:var(--mint-soft);
+    border:1px solid rgba(45,106,79,.18);
+    border-radius:12px;
+    padding:14px 16px;
+  }
+  .mini-card h4{
+    margin:0 0 4px;
+    font-family:'Amiri',serif;
+    font-size:19px;
+    color:var(--forest-2);
+  }
+  .mini-card p{margin:0 0 8px; font-size:13.5px; color:#3d4f43;}
+
+  /* root card (282) */
+  .root-card{
+    background:linear-gradient(135deg,#fff, var(--gold-soft));
+    border:2px solid var(--gold);
+  }
+  .root-card .tag{background:var(--gold);}
+  .root-card h3{font-size:44px; color:#5c4009;}
+  .crown{
+    position:absolute; left:20px; top:16px;
+    font-size:12px; font-weight:800;
+    color:var(--gold);
+    background:#fff;
+    border:1px solid var(--gold);
+    padding:4px 12px;
+    border-radius:999px;
+  }
+
+  /* Flower diagram for ظاهر meanings */
+  .flower-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    padding:28px 10px 8px;
+  }
+  .flower-center{
+    width:120px; height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--leaf-light), var(--forest-2));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Amiri Quran',serif; font-size:34px;
+    box-shadow:0 8px 20px rgba(27,67,50,.28);
+    margin-bottom:22px;
+    flex-shrink:0;
+  }
+  .petals{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    width:100%;
+  }
+  .petal{
+    background:var(--mint-soft);
+    border:1px solid rgba(45,106,79,.2);
+    border-radius:14px;
+    padding:12px 14px;
+    text-align:center;
+  }
+  .petal .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:50%;
+    background:var(--forest-2); color:#fff; font-size:12px; font-weight:800;
+    margin-bottom:6px;
+  }
+  .petal h5{margin:2px 0 4px; font-family:'Amiri',serif; font-size:17px; color:var(--forest);}
+  .petal p{margin:0; font-size:12.5px; color:#4a5c50;}
+  .petal .loc{font-size:11.5px; color:var(--gold); margin-top:4px; font-weight:700;}
+
+  /* rule boxes */
+  .rule-box{
+    background:linear-gradient(135deg,#fff,var(--mint-soft));
+    border:1px dashed var(--leaf);
+    border-radius:16px;
+    padding:22px 24px;
+    margin-top:18px;
+  }
+  .rule-box h4{margin:0 0 8px; color:var(--forest); font-family:'Amiri',serif; font-size:19px;}
+  .rule-box p{margin:0; font-size:14px; color:#3d4f43;}
+  .verse-box{
+    text-align:center;
+    font-family:'Amiri Quran',serif;
+    font-size:22px;
+    color:var(--forest);
+    background:#fff;
+    border:1px solid var(--gold);
+    border-radius:12px;
+    padding:18px;
+    margin:14px 0;
+  }
+  .read-split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:12px;
+  }
+  .read-split div{
+    background:var(--mint-soft);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:13.5px;
+  }
+  .read-split b{color:var(--forest);}
+
+  /* exceptions appendix table */
+  .thorn-header{
+    display:flex; align-items:center; gap:10px;
+    background:var(--thorn-soft);
+    border:1px solid rgba(138,75,46,.3);
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:16px;
+    color:var(--thorn);
+  }
+  table.exc{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  table.exc th{
+    background:var(--forest);
+    color:#fff;
+    font-family:'Tajawal',sans-serif;
+    font-size:13px;
+    padding:12px 10px;
+    text-align:right;
+  }
+  table.exc td{
+    padding:11px 10px;
+    font-size:13.5px;
+    border-top:1px solid rgba(27,67,50,.08);
+    vertical-align:top;
+  }
+  table.exc tr:nth-child(even) td{background:var(--mint-soft);}
+  table.exc td.word{
+    font-family:'Amiri',serif;
+    font-size:17px;
+    color:var(--thorn);
+    font-weight:700;
+    white-space:nowrap;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:70px;
+    padding:26px 20px;
+    color:#6b7d72;
+    font-size:12.5px;
+    border-top:1px solid rgba(27,67,50,.12);
+  }
+
+  @media (max-width:600px){
+    .vine{padding-inline-end:26px;}
+    .node{padding-right:42px;}
+    .node::before{width:26px;height:26px; top:20px;}
+    .node .count-badge{width:22px;height:22px; font-size:9px; right:3px; top:26px;}
+    .root-card h3{font-size:34px;}
+    .flower-center{width:96px;height:96px; font-size:26px;}
+  }
+  @media print{
+    body{background:#fff;}
+    .hero::before{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="eyebrow">دليل حفظ مصوَّر</span>
+  <h1>شجرة كلمات <span class="ظ-big">الظاء</span> في القرآن الكريم</h1>
+  <p class="sub">كل كلمات القرآن الكريم الواردة بحرف الظاء، مرتّبة تصاعديًا حسب عدد مواضعها — من الأندر إلى الأكثر ورودًا — على هيئة خريطة نامية تُشبه كَرْمة تكبر أوراقها كلما كثرت المواضع، لتيسير الحفظ بالتدرّج.</p>
+  <div class="stats">
+    <div class="stat-chip"><b>18</b><span>مرتبة حسب العدد</span></div>
+    <div class="stat-chip"><b>9 ← 1</b><span>كلمات بموضع واحد</span></div>
+    <div class="stat-chip"><b>282</b><span>الأكثر ورودًا: الظُّلم</span></div>
+    <div class="stat-chip"><b>7</b><span>استثناءات بالضاد</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="map-intro">
+    🌿 <b>فكرة الخريطة:</b> تخيّل الكَرْمة الخضراء الممتدة على يمين الصفحة جذعًا واحدًا؛ كل "ثمرة" عليها هي مجموعة كلمات وردت بعدد معيّن من المواضع. كلما اتجهت للأسفل، كبر حجم الثمرة لأن عدد المواضع يكبر معها — فابدأ حفظك من أعلى الكرمة (كلمة واحدة) وانزل تدريجيًا حتى تصل إلى الجذر الذهبي الكبير في الأسفل (كلمة الظُّلم، 282 موضعًا).
+  </div>
+
+  <!-- ============ THE VINE ============ -->
+  <div class="vine">
+
+    <!-- Group 1: single occurrence, 9 words -->
+    <div class="section-title"><h2>1️⃣ أولًا — كلمات في موضع واحد فقط</h2><div class="line"></div></div>
+    <div class="node tier-1" style="--pod-color:#74c69d;">
+      <div class="count-badge">1</div>
+      <div class="card">
+        <span class="tag">9 كلمات · مرة واحدة لكل منها</span>
+        <div class="cluster">
+          <div class="mini-card"><h4>الظَّعْن</h4><p>الرحلة من مكان إلى آخر، ضد الإقامة</p><span class="ref-pill first">النحل 80</span></div>
+          <div class="mini-card"><h4>أَيْقَظ</h4><p>اليقظة، ضد النوم</p><span class="ref-pill first">الكهف 18</span></div>
+          <div class="mini-card"><h4>اللَّفْظ</h4><p>التلفّظ — لم يرد في القرآن إلا هنا</p><span class="ref-pill first">ق 18</span></div>
+          <div class="mini-card"><h4>شُوَاظ</h4><p>اللهب الذي لا دخان معه أو مع دخان</p><span class="ref-pill first">الرحمن 35</span></div>
+          <div class="mini-card"><h4>ظُفُر</h4><p>جمعه: أظافر</p><span class="ref-pill first">الأنعام 146</span></div>
+          <div class="mini-card"><h4>اظَّفَر</h4><p>من الظَّفَر: الفوز والنصر</p><span class="ref-pill first">الفتح 24</span></div>
+          <div class="mini-card"><h4>مَحْظورًا</h4><p>من الحَظْر: المنع والحجر</p><span class="ref-pill first">الإسراء 20</span></div>
+          <div class="mini-card"><h4>المُحْتَظِر</h4><p>صاحب الحظيرة</p><span class="ref-pill first">القمر 31</span></div>
+          <div class="mini-card"><h4>فَظًّا</h4><p>الفظاظة: الغلظة والتجافي</p><span class="ref-pill first">آل عمران 159</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: two occurrences -->
+    <div class="section-title"><h2>2️⃣ ثانيًا — كلمات في موضعين</h2><div class="line"></div></div>
+    <div class="node tier-1" style="--pod-color:#63b98a;">
+      <div class="count-badge">2</div>
+      <div class="card">
+        <span class="tag">موضعان لكل كلمة</span>
+        <div class="cluster">
+          <div class="mini-card">
+            <h4>الظُّلَّة</h4><p>(وقع منها أيضًا موضع من باب الظَّعْن)</p>
+            <span class="ref-pill">الأعراف 117</span> <span class="ref-pill">الشعراء 189</span>
+          </div>
+          <div class="mini-card">
+            <h4>الظُّهْر</h4><p>وقت انتصاف النهار</p>
+            <span class="ref-pill">النور 58</span> <span class="ref-pill">الروم 18</span>
+          </div>
+          <div class="mini-card">
+            <h4>تَلَظّى / لَظى</h4><p>بمعنى تتلهّب وتتوقّد؛ والثاني اسم من أسماء جهنم</p>
+            <span class="ref-pill">الليل 14</span> <span class="ref-pill">المعارج 15</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: three -->
+    <div class="section-title"><h2>3️⃣ ثالثًا — ثلاثة مواضع</h2><div class="line"></div></div>
+    <div class="node tier-2" style="--pod-color:#55ae7c;">
+      <div class="count-badge">3</div>
+      <div class="card">
+        <span class="tag">3 مواضع</span>
+        <h3>ظَمَأ <small>أي الظمأ: العطش</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: التوبة 120</span></div>
+      </div>
+    </div>
+
+    <!-- Group 4: six -->
+    <div class="section-title"><h2>4️⃣ رابعًا — ستة مواضع</h2><div class="line"></div></div>
+    <div class="node tier-2" style="--pod-color:#4aa571;">
+      <div class="count-badge">6</div>
+      <div class="card">
+        <span class="tag">6 مواضع</span>
+        <h3>كَظْم <small>اجترار الغيظ وابتلاع الغضب وعدم إظهاره</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: آل عمران 134</span></div>
+      </div>
+    </div>
+
+    <!-- Group 5: seven -->
+    <div class="section-title"><h2>5️⃣ خامسًا — سبعة مواضع</h2><div class="line"></div></div>
+    <div class="node tier-2" style="--pod-color:#409968;">
+      <div class="count-badge">7</div>
+      <div class="card">
+        <span class="tag">7 مواضع</span>
+        <h3>الحَظّ <small>بمعنى النصيب</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: آل عمران 176</span></div>
+        <div class="exception"><b>⚠️ تنبيه — استثناء بالضاد:</b>
+          «الحَضّ على الطعام» في 3 مواضع: الحاقة 34، الماعون 3، الفجر 18
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 6: nine -->
+    <div class="section-title"><h2>6️⃣ سادسًا — تسعة مواضع</h2><div class="line"></div></div>
+    <div class="node tier-3" style="--pod-color:#358e60;">
+      <div class="count-badge">9</div>
+      <div class="card">
+        <span class="tag">9 مواضع مجتمعة</span>
+        <h3>ظَلّ <small>بمعنى دام وصار، تفيد الاستمرار</small></h3>
+        <div class="refs">
+          <span class="ref-pill first">1) النحل 58</span>
+          <span class="ref-pill">2) الزخرف 17</span>
+          <span class="ref-pill">3) طه 97</span>
+          <span class="ref-pill">4) الواقعة 65</span>
+          <span class="ref-pill">5) الروم 51</span>
+          <span class="ref-pill">6) الحجر 14</span>
+          <span class="ref-pill">7) الشعراء 4</span>
+          <span class="ref-pill">8) الشعراء 17</span>
+          <span class="ref-pill">9) الشورى 33</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 7: eleven -->
+    <div class="section-title"><h2>7️⃣ سابعًا — أحد عشر موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-3" style="--pod-color:#2b8256;">
+      <div class="count-badge">11</div>
+      <div class="card">
+        <span class="tag">11 موضعًا</span>
+        <h3>الغَيْظ <small>الغضب الشديد، أصله فوران حرارة القلب</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: آل عمران 119</span></div>
+        <div class="exception"><b>⚠️ تنبيه — استثناء موضعين بالضاد (بمعنى النقصان):</b>
+          «تَغيض الأرحام» (الرعد 8) — «غَيْض الماء» (هود 44)
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 8: 14-15 -->
+    <div class="section-title"><h2>8️⃣ ثامنًا — أربعة عشر / خمسة عشر موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-3" style="--pod-color:#237549;">
+      <div class="count-badge">15</div>
+      <div class="card">
+        <span class="tag">14 أو 15 موضعًا</span>
+        <h3>عَظْم <small>العظم المعروف، آدميًا أو غيره، جمعًا أو مفردًا</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 259</span></div>
+        <div class="note">📝 خلاف بين أهل العدّ في العدد الدقيق: بين 14 و15 موضعًا.</div>
+      </div>
+    </div>
+
+    <!-- Group 9: 15-16 -->
+    <div class="section-title"><h2>9️⃣ تاسعًا — خمسة عشر / ستة عشر موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-3" style="--pod-color:#1e6a41;">
+      <div class="count-badge">16</div>
+      <div class="card">
+        <span class="tag">15 أو 16 موضعًا</span>
+        <h3>ظَهْر <small>خلاف البطن، سواء ظهر آدمي أم غيره</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 101</span></div>
+        <div class="note">📝 خلاف بين أهل العدّ في العدد الدقيق: بين 15 و16 موضعًا.</div>
+      </div>
+    </div>
+
+    <!-- Group 10: 22 -->
+    <div class="section-title"><h2>🔟 عاشرًا — اثنان وعشرون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-4" style="--pod-color:#1a5c39;">
+      <div class="count-badge">22</div>
+      <div class="card">
+        <span class="tag">22 موضعًا لكل كلمة</span>
+        <div class="cluster">
+          <div class="mini-card"><h4>الظِّلّ</h4><p>ضد الشمس والحر</p><span class="ref-pill">أولها: البقرة 57</span> <span class="ref-pill">آخرها: المرسلات 41</span></div>
+          <div class="mini-card"><h4>أنظِر / الإنظار</h4><p>بمعنى التأخير والمهلة</p><span class="ref-pill first">أولها: البقرة 162</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 11: 23 -->
+    <div class="section-title"><h2>1️⃣1️⃣ الحادي عشر — ثلاثة وعشرون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-4" style="--pod-color:#175335;">
+      <div class="count-badge">23</div>
+      <div class="card">
+        <span class="tag">23 موضعًا</span>
+        <h3>اغْلُظ <small>الغلاظة، ضد الرقّة</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: آل عمران 159</span></div>
+      </div>
+    </div>
+
+    <!-- Group 12: 24 -->
+    <div class="section-title"><h2>1️⃣2️⃣ الثاني عشر — أربعة وعشرون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-4" style="--pod-color:#144a30;">
+      <div class="count-badge">24</div>
+      <div class="card">
+        <span class="tag">24 موضعًا</span>
+        <h3>انتَظِر <small>من الانتظار: الارتقاب للشيء</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: الأنعام 158</span></div>
+      </div>
+    </div>
+
+    <!-- Group 13: 25 -->
+    <div class="section-title"><h2>1️⃣3️⃣ الثالث عشر — خمسة وعشرون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-4" style="--pod-color:#11412b;">
+      <div class="count-badge">25</div>
+      <div class="card">
+        <span class="tag">25 موضعًا</span>
+        <h3>وَعَظ <small>مشتق من الوعظ: التخويف من عذاب الله والترغيب في ثوابه</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 66</span></div>
+        <div class="exception"><b>⚠️ تنبيه — استثناء بالضاد:</b>
+          «عِضِين» ليست من الوعظ؛ فهي جمع عِضَة بمعنى فِرقة.
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 14: 26 -->
+    <div class="section-title"><h2>1️⃣4️⃣ الرابع عشر — ستة وعشرون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-4" style="--pod-color:#0e3826;">
+      <div class="count-badge">26</div>
+      <div class="card">
+        <span class="tag">26 موضعًا</span>
+        <h3>ظَلام <small>ضد النور</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 17</span></div>
+      </div>
+    </div>
+
+    <!-- Group 15: 42 -->
+    <div class="section-title"><h2>1️⃣5️⃣ الخامس عشر — اثنان وأربعون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-5" style="--pod-color:#0b3020;">
+      <div class="count-badge" style="width:32px;height:32px;font-size:11px;">42</div>
+      <div class="card">
+        <span class="tag">42 موضعًا</span>
+        <h3>الحِفْظ <small>المحافظة</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 238</span></div>
+      </div>
+    </div>
+
+    <!-- Group 16: 86 -->
+    <div class="section-title"><h2>1️⃣6️⃣ السادس عشر — ستة وثمانون موضعًا</h2><div class="line"></div></div>
+    <div class="node tier-5" style="--pod-color:#092a1c;">
+      <div class="count-badge" style="width:34px;height:34px;font-size:11px;">86</div>
+      <div class="card">
+        <span class="tag">86 موضعًا</span>
+        <h3>النَّظر <small>الرؤية، أو بمعنى التفكير</small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 50</span></div>
+        <div class="exception"><b>⚠️ تنبيه — استثناء 3 مواضع بالضاد (من النَّضْرة، لا النَّظر):</b>
+          «نَضْرة النعيم» (المطففين 24) — «نَضْرة وسرورًا» (الإنسان 11) — «وجوه يومئذ ناضرة» (القيامة 22، الموضع الأول من هذا اللفظ)
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 17: 103 -->
+    <div class="section-title"><h2>1️⃣7️⃣ السابع عشر — مئة وثلاثة مواضع</h2><div class="line"></div></div>
+    <div class="node tier-5" style="--pod-color:#062315;">
+      <div class="count-badge" style="width:36px;height:36px;font-size:10.5px;">103</div>
+      <div class="card">
+        <span class="tag">103 مواضع</span>
+        <h3>عَظُم / العَظَمة <small></small></h3>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 7</span></div>
+      </div>
+    </div>
+
+    <!-- Group 18: 282 ROOT -->
+    <div class="section-title"><h2>1️⃣8️⃣ الثامن عشر — الجذر: مئتان واثنان وثمانون موضعًا (الأكثر ورودًا)</h2><div class="line"></div></div>
+    <div class="node tier-5" style="--pod-color:#a67c1e;">
+      <div class="count-badge" style="width:40px;height:40px;font-size:12px;background:transparent;">🌟</div>
+      <div class="card root-card">
+        <span class="crown">👑 الأكثر ورودًا</span>
+        <span class="tag">282 موضعًا</span>
+        <h3>ظَلَمَ / الظُّلْم</h3>
+        <p class="meaning">وضع الشيء في غير موضعه، والتعدّي في مُلك غيره أو على نفسه.</p>
+        <div class="refs"><span class="ref-pill first">أولها: البقرة 35</span></div>
+      </div>
+    </div>
+
+  </div><!-- /vine -->
+
+  <!-- ============ Special: ظاهر flower ============ -->
+  <div class="section-title"><h2>🌸 قسم خاص — كلمة «ظاهر» وستّة معانٍ</h2><div class="line"></div></div>
+  <div class="card">
+    <p class="meaning">كلمة «ظاهر» ضد الباطن، لكنها تحمل في القرآن ستّ دلالات مختلفة بحسب السياق:</p>
+    <div class="flower-wrap">
+      <div class="flower-center quran-font">ظاهر</div>
+      <div class="petals">
+        <div class="petal"><span class="num">1</span><h5>ضد الباطن</h5><p class="loc">الأنعام 120</p></div>
+        <div class="petal"><span class="num">2</span><h5>النصر والعون</h5><p class="loc">البقرة 85</p></div>
+        <div class="petal"><span class="num">3</span><h5>العلوّ</h5><p class="loc">براءة 33</p></div>
+        <div class="petal"><span class="num">4</span><h5>الظَّفَر</h5><p class="loc">براءة 8</p></div>
+        <div class="petal"><span class="num">5</span><h5>الاطّلاع والإحاطة</h5><p class="loc">التحريم 3</p></div>
+        <div class="petal"><span class="num">6</span><h5>الظِّهار (الحَلِف)</h5><p class="loc">—</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Rule: الظن ============ -->
+  <div class="section-title"><h2>📏 قسم خاص — قاعدة كلمة «الظنّ»</h2><div class="line"></div></div>
+  <div class="rule-box">
+    <h4>قاعدة ذهبية للحفظ</h4>
+    <p>كلّ ما ورد في القرآن الكريم من مادة «ظنّ» — سواء كان بمعنى الشكّ أو بمعنى اليقين — فهو بالظاء لا بالضاد، بلا أيّ استثناء.</p>
+  </div>
+
+  <!-- ============ Homograph verse ============ -->
+  <div class="section-title"><h2>🔀 قسم خاص — كلمة تختلف قراءتها بين الظاء والضاد</h2><div class="line"></div></div>
+  <div class="card">
+    <div class="verse-box">﴿وَمَا هُوَ عَلَى الْغَيْبِ بِظَنِينٍ﴾ <span style="font-family:'Tajawal',sans-serif; font-size:13px; color:#6b7d72;">— التكوير 24</span></div>
+    <div class="read-split">
+      <div><b>قراءة بالظاء «ظنين»:</b> معناها متَّهَم.</div>
+      <div><b>قراءة بالضاد «ضنين»:</b> معناها بخيل.</div>
+    </div>
+  </div>
+
+  <!-- ============ Appendix: exceptions table ============ -->
+  <div class="section-title"><h2>🍂 ملحق — جدول الاستثناءات الواردة بالضاد لا بالظاء</h2><div class="line"></div></div>
+  <div class="thorn-header">⚠️ هذه الألفاظ تُشبه أخواتها بالظاء نطقًا لكنها في المصحف بالضاد — احفظها منفصلة كـ"الأشواك" وسط الكرمة الخضراء.</div>
+  <table class="exc">
+    <thead>
+      <tr><th>اللفظ</th><th>استثناء من</th><th>الموضع</th><th>المعنى / الملاحظة</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="word">عِضين</td><td>وَعَظ</td><td>الحجر 50</td><td>جمع عِضَة بمعنى فِرقة؛ منقطعة الصلة، ليست من الوعظ</td></tr>
+      <tr><td class="word">نَضْرة النعيم</td><td>النَّظر</td><td>المطففين 24</td><td>—</td></tr>
+      <tr><td class="word">نَضْرة وسرورًا</td><td>النَّظر</td><td>الإنسان (الدهر) 11</td><td>—</td></tr>
+      <tr><td class="word">وجوه يومئذ ناضرة</td><td>النَّظر</td><td>القيامة 22</td><td>الموضع الأول من هذا اللفظ</td></tr>
+      <tr><td class="word">تَغيض الأرحام</td><td>الغَيْظ</td><td>الرعد 8</td><td>بمعنى النقصان</td></tr>
+      <tr><td class="word">غَيْض الماء</td><td>الغَيْظ</td><td>هود 44</td><td>بمعنى النقصان</td></tr>
+      <tr><td class="word">الحَضّ على الطعام</td><td>الحَظّ</td><td>الحاقة 34، الماعون 3، الفجر 18</td><td>3 مواضع</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    🌿 خريطة حفظ مُعدّة اعتمادًا على ملف «الكلمات الواردة بالظاء مرتّبة حسب المواضع» — رتّب الكلمات تصاعديًا وابدأ حفظك من أعلى الكرمة.
+  </footer>
+
+</div><!-- /wrap -->
+
+</body>
+</html>
